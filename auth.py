@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from dotenv import dotenv_values
 
 
-config = dotenv_values("/.env")
+config = dotenv_values(".env")
 
 AUTH0_DOMAIN = config["AUTH0_DOMAIN"]
 ALGORITHMS = config["ALGORITHMS"]

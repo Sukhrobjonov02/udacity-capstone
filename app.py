@@ -93,12 +93,18 @@ def create_app(test_config=None):
     def add_actor(payload):
         body = request.get_json()
 
+        id = body.get('id')
+        name = body.get('name')
+        age = body.get('age')
+        gender = body.get('gender')
+
         try:
-            actor = Actor()
-            actor.id = body.get('id')
-            actor.name = body.get('name')
-            actor.age = body.get('age')
-            actor.gender = body.get('gender')
+            actor = Actor(
+                id=id,
+                name=name,
+                age=age,
+                gender=gender
+            )
             actor.insert()
 
         except Exception:

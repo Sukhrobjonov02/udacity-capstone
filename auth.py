@@ -78,17 +78,13 @@ def get_token_auth_header():
     return true otherwise
 '''
 def check_permissions(permission, payload):
-    if 'permissions' not in payload:
-        raise AuthError({
-            'code': 'invalid_permissions',
-            'description': 'Permission are not included in the payload.'
-        }, 400)
-    if permission not in payload['permissions']:
-        raise AuthError({
-            'code': 'permission_denied',
-            'description': 'Requested permission is forbidden.' 
-        }, 403)
-    return True
+    if "permissions" in payload:
+        if permission in payload['permissions']:
+            return True
+    raise AuthError({
+        'code': 'invalid_permissions',
+        'description': 'Permission are not included in the payload.'
+    }, 401)
 
 
 '''

@@ -95,10 +95,10 @@ def create_app(test_config=None):
 
         try:
             actor = Actor()
-            actor.id = body['id']
-            actor.name = body['name']
-            actor.age = body['age']
-            actor.gender = body['gender']
+            actor.id = body.get('id')
+            actor.name = body.get('name')
+            actor.age = body.get('age')
+            actor.gender = body.get('gender')
             actor.insert()
 
         except Exception:

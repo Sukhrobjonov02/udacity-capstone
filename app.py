@@ -5,6 +5,8 @@ from flask_cors import CORS
 from models import Movie, Actor, db
 import traceback
 
+from auth import AuthError, requires_auth
+
 def create_app(test_config=None):
     
     app = Flask(__name__)
@@ -27,7 +29,8 @@ def create_app(test_config=None):
     # GET METHODS
 
     @app.route('/actors')
-    def actors():
+    @requires_auth('get:actors')
+    def actors(payload):
         actors = Actor.query.all()
         return jsonify({
                 "success": True,
@@ -35,7 +38,8 @@ def create_app(test_config=None):
             }), 200
     
     @app.route('/movies')
-    def movies():
+    @requires_auth('get:movies')
+    def movies(payload):
         movies = Movie.query.all()
         return jsonify(
             {
@@ -47,7 +51,8 @@ def create_app(test_config=None):
     # DELETE METHODS
     
     @app.route('/actors/<id>', methods=['DELETE'])
-    def delete_actor(id):
+    @requires_auth('delete:actors')
+    def delete_actor(payload, id):
         actor = Actor.query.filter(Actor.id == id).one_or_none()
 
         if actor is None:
@@ -64,7 +69,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/movies/<id>', methods=['DELETE'])
-    def delete_movie(id):
+    @requires_auth('delete:movies')
+    def delete_movie(payload, id):
         movie = Movie.query.filter(Movie.id == id).one_or_none()
 
         if movie is None:
@@ -85,7 +91,8 @@ def create_app(test_config=None):
 
 
     @app.route('/actors', methods=['POST'])
-    def add_actor():
+    @requires_auth('post:actors')
+    def add_actor(payload):
         body = request.get_json()
         print(body)
 
@@ -105,7 +112,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/movies', methods=['POST'])
-    def add_movie():
+    @requires_auth('post:actors')
+    def add_movie(payload):
         body = request.get_json()
         print(body)
 
@@ -127,7 +135,8 @@ def create_app(test_config=None):
     # PATCH METHODs
 
     @app.route('/actors/<id>', methods=['PATCH'])
-    def update_actor(id):
+    @requires_auth('update:actors')
+    def update_actor(payload, id):
         body = request.get_json()
 
         actor = Actor.query.filter(Actor.id==id).one_or_none()
@@ -157,7 +166,8 @@ def create_app(test_config=None):
         }), 200
     
     @app.route('/movies/<id>', methods=['PATCH'])
-    def update_movie(id):
+    @requires_auth('update:movies')
+    def update_movie(payload, id):
         body = request.get_json()
 
         movie = Movie.query.filter(Movie.id==id).one_or_none()
@@ -235,13 +245,13 @@ def create_app(test_config=None):
                 "message": "Internal Server Error"
             }), 500
     
-    # @app.errorhandler(AuthError)
-    # def auth_error(error):
-    #     return jsonify({
-    #         'success': False,
-    #         'error': error.status_code,
-    #         'message': error.error['description']
-    #     }), error.status_code
+    @app.errorhandler(AuthError)
+    def auth_error(error):
+        return jsonify({
+            'success': False,
+            'error': error.status_code,
+            'message': error.error['description']
+        }), error.status_code
 
 
     

@@ -95,6 +95,7 @@ def create_app(test_config=None):
 
         try:
             actor = Actor()
+            actor.id = body['id']
             actor.name = body['name']
             actor.age = body['age']
             actor.gender = body['gender']
@@ -115,6 +116,7 @@ def create_app(test_config=None):
 
         try:
             movie = Movie()
+            movie.title = body['id']
             movie.title = body['title']
             movie.release_date = body['release_date']
             movie.genres = body['genres']

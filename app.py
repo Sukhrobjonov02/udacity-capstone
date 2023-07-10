@@ -88,8 +88,6 @@ def create_app(test_config=None):
 
     # POST METHODS
 
-
-
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actors')
     def add_actor(payload):

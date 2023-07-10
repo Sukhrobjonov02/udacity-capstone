@@ -120,7 +120,6 @@ def create_app(test_config=None):
 
         try:
             movie = Movie()
-            movie.title = body['id']
             movie.title = body['title']
             movie.release_date = body['release_date']
             movie.genres = body['genres']

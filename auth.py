@@ -8,9 +8,10 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-AUTH0_DOMAIN = config["AUTH0_DOMAIN"]
-ALGORITHMS = config["ALGORITHMS"]
-API_AUDIENCE = config["API_AUDIENCE"]
+
+AUTH0_DOMAIN='dev-g30o00804fpc8bgb.us.auth0.com'
+ALGORITHMS = ['RS256']
+API_AUDIENCE = 'movies'
 
 ## AuthError Exception
 '''

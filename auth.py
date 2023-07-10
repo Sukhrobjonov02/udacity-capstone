@@ -82,7 +82,7 @@ def check_permissions(permission, payload):
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_permissions',
-            'description': 'Permission is not included in the payload.'
+            'description': 'Permissions are not included in the payload.'
         }, 400)
     if permission not in payload['permissions']:
         raise AuthError({
@@ -90,17 +90,6 @@ def check_permissions(permission, payload):
             'description': 'Requested permission is forbidden.' 
         }, 403)
     return True
-
-
-# def check_permissions(permission, payload):
-#     if "permissions" in payload:
-#         if permission in payload['permissions']:
-#             return True
-#     raise AuthError({
-#         'code': 'invalid_permissions',
-#         'description': 'Permission is not included in the payload.'
-#     }, 401)
-
 
 '''
     Implements verify_decode_jwt(token) method

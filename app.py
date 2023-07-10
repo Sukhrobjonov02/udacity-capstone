@@ -118,11 +118,17 @@ def create_app(test_config=None):
     def add_movie(payload):
         body = request.get_json()
 
+
+        title = body.get('title')
+        release_date = body.get('release_date')
+        genres = body.get('genres')
+
         try:
-            movie = Movie()
-            movie.title = body['title']
-            movie.release_date = body['release_date']
-            movie.genres = body['genres']
+            movie = Movie(
+                title=title,
+                release_date=release_date,
+                genres=genres
+            )
             movie.insert()
 
         except Exception:

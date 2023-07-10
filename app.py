@@ -173,17 +173,20 @@ def create_app(test_config=None):
 
         movie = Movie.query.filter(Movie.id==id).one_or_none()
 
-        if not movie:
+        if movie is None:
             abort(404)
 
         try:
             if 'title' in body:
                 movie.title = body.get('title')
+            movie.update()
+
             if 'release_date' in body:
                 movie.release_date = body.get('release_date')
+            movie.update()
+
             if 'genres' in body:
                 movie.genres = body.get('genres')
-            
             movie.update()
 
         except Exception:

@@ -14,24 +14,23 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
 
-    @app.route('/')
-    def get_greeting():
-        excited = os.environ['EXCITED']
-        greeting = "Hello" 
-        if excited == 'true': 
-            greeting = greeting + "!!!!! You are doing great in this Udacity project."
-        return greeting
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE')
+        return response
 
-    @app.route('/coolkids')
-    def be_cool():
-        return "Be cool, man, be coooool! You're almost a FSND grad!"
-    
+    @app.route('/')
+    def greeting():
+        return jsonify({"greet": "Hello, I am FSND Grad"})
+
     # GET METHODS
 
     @app.route('/actors')
     @requires_auth('get:actors')
     def actors(payload):
         actors = Actor.query.all()
+
         return jsonify({
                 "success": True,
                 "result": [actor.about() for actor in actors],
@@ -41,6 +40,7 @@ def create_app(test_config=None):
     @requires_auth('get:movies')
     def movies(payload):
         movies = Movie.query.all()
+
         return jsonify(
             {
                 "success": True,
@@ -61,7 +61,7 @@ def create_app(test_config=None):
         try:
             actor.delete()
         except Exception:
-            abort(400)
+            abort(422)
 
         return jsonify({
             "success": True,
@@ -79,7 +79,7 @@ def create_app(test_config=None):
         try:
             movie.delete()
         except Exception:
-            abort(400)
+            abort(422)
 
         return jsonify({
             "success": True,
@@ -92,42 +92,40 @@ def create_app(test_config=None):
     @requires_auth('post:actors')
     def add_actor(payload):
         body = request.get_json()
-        print(body)
 
         try:
             actor = Actor()
-            actor.id = body['id']
             actor.name = body['name']
             actor.age = body['age']
             actor.gender = body['gender']
             actor.insert()
+
         except Exception:
-            abort(400)
+            abort(422)
         
         return jsonify({
             'success': True,
-            'actor': [actor.about()],
+            'posted': [actor.about()],
         }), 200
 
     @app.route('/movies', methods=['POST'])
-    @requires_auth('post:actors')
+    @requires_auth('post:movies')
     def add_movie(payload):
         body = request.get_json()
-        print(body)
 
         try:
             movie = Movie()
-            movie.id = body['id']
             movie.title = body['title']
             movie.release_date = body['release_date']
             movie.genres = body['genres']
             movie.insert()
+
         except Exception:
-            abort(400)
+            abort(422)
         
         return jsonify({
             'success': True,
-            'movie': [movie.about()],
+            'posted': [movie.about()],
         }), 200
     
     # PATCH METHODs
@@ -140,27 +138,21 @@ def create_app(test_config=None):
         actor = Actor.query.filter(Actor.id==id).one_or_none()
 
         if not actor:
-            abort(400)
+            abort(404)
         
         try:
-            actor_name = body['name']
             actor_age = body['age']
-            actor_gender = body['gender']
-
-            if actor_name:
-                actor.name = actor_name
             if actor_age:
                 actor.age = actor_age
-            if actor_gender:
-                actor.gender = actor_gender
             
             actor.update()
+
         except Exception:
-            abort(400)
+            abort(422)
         
         return jsonify({
             'success': True,
-            'drinks': [actor.about()],
+            'updated': [actor.about()],
         }), 200
     
     @app.route('/movies/<id>', methods=['PATCH'])
@@ -171,28 +163,24 @@ def create_app(test_config=None):
         movie = Movie.query.filter(Movie.id==id).one_or_none()
 
         if not movie:
-            abort(400)
+            abort(404)
 
         try:
-            movie_title = body['title']
-            movie_release_date = body['release_date']
-            movie_genres = body['genres']
-
-            if movie_title:
-                movie.title = movie_title
-            if movie_release_date:
-                movie.release_date = movie_release_date
-            if movie_genres:
-                movie.genres = movie_genres
+            if 'title' in body:
+                movie.title = body.get('title')
+            if 'release_date' in body:
+                movie.release_date = body.get('release_date')
+            if 'genres' in body:
+                movie.genres = body.get('genres')
             
             movie.update()
-        except Exception as e:
-            traceback.print_exc(e)  # Print the exception details for debugging
-            abort(400)
+
+        except Exception:
+            abort(422)
         
         return jsonify({
             'success': True,
-            'drinks': [movie.about()],
+            'updated': [movie.about()],
         }), 200
     
     @app.errorhandler(400)
@@ -258,4 +246,4 @@ def create_app(test_config=None):
 app = create_app()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080, debug=True)

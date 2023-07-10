@@ -76,15 +76,29 @@ def get_token_auth_header():
         !!NOTE check your RBAC settings in Auth0
     it should raise an AuthError if the requested permission string is not in the payload permissions array
     return true otherwise
-'''
+# '''
 def check_permissions(permission, payload):
-    if "permissions" in payload:
-        if permission in payload['permissions']:
-            return True
-    raise AuthError({
-        'code': 'invalid_permissions',
-        'description': 'Permission are not included in the payload.'
-    }, 401)
+    if 'permissions' not in payload:
+        raise AuthError({
+            'code': 'invalid_permissions',
+            'description': 'Permission is not included in the payload.'
+        }, 400)
+    if permission not in payload['permissions']:
+        raise AuthError({
+            'code': 'permission_denied',
+            'description': 'Requested permission is forbidden.' 
+        }, 403)
+    return True
+
+
+# def check_permissions(permission, payload):
+#     if "permissions" in payload:
+#         if permission in payload['permissions']:
+#             return True
+#     raise AuthError({
+#         'code': 'invalid_permissions',
+#         'description': 'Permission is not included in the payload.'
+#     }, 401)
 
 
 '''

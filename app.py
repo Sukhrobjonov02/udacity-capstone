@@ -179,15 +179,12 @@ def create_app(test_config=None):
         try:
             if 'title' in body:
                 movie.title = body.get('title')
-            movie.update()
-
             if 'release_date' in body:
                 movie.release_date = body.get('release_date')
-            movie.update()
-
             if 'genres' in body:
                 movie.genres = body.get('genres')
-            movie.update()
+            
+            movie.session.commit()
 
         except Exception:
             abort(422)

@@ -184,7 +184,7 @@ def create_app(test_config=None):
             if 'genres' in body:
                 movie.genres = body.get('genres')
             
-            movie.session.commit()
+            movie.update()
 
         except Exception:
             abort(422)

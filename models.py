@@ -95,7 +95,7 @@ class Movie(db.Model):
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    release_date = Column(DateTime, default=datetime.today(), nullable=False)
+    release_date = Column(DateTime, default=datetime.today(), nullable=True)
     genres = Column(ARRAY(String()), nullable=False)
 
     def __init__(self, title, release_date, genres):

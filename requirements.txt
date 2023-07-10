@@ -13,8 +13,6 @@ Flask-Script==2.0.6
 Flask-SocketIO==2.9.6
 Flask-SQLAlchemy==2.5.1
 gdbgui==0.13.2.0
-gevent
-greenlet==1.1.0
 gunicorn==20.1.0
 itsdangerous==2.0.1
 Jinja2==3.0.1

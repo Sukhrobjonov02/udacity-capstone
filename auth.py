@@ -3,11 +3,6 @@ from flask import request
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
-from dotenv import dotenv_values
-
-
-config = dotenv_values(".env")
-
 
 AUTH0_DOMAIN='dev-g30o00804fpc8bgb.us.auth0.com'
 ALGORITHMS = ['RS256']

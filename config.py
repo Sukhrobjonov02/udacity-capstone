@@ -14,4 +14,4 @@ DEBUG = True
 # DB_NAME = os.getenv('DB_NAME', 'capstone')
 
 # DATABASE_URL = 'postgresql://{}:{}@{}/{}'.format(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
-DATABASE_URL = 'postgres://ihuqzsfoomctfy:30bfa0f061fca2273afb48ee314e6d7536242dfe6b62db220d7f44a0ce4e9356@ec2-34-226-11-94.compute-1.amazonaws.com:5432/dbod7grv9908v5'
+DATABASE_URL = 'postgres://cmsajjzpbcwvmc:8041751dfbc1239faa627e9602b4dc2329ae68a4002ae9d61fc3263efe42d715@ec2-3-208-74-199.compute-1.amazonaws.com:5432/d38c0fvtig32gc'

@@ -19,36 +19,7 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    # db.create_all()
-
-def db_drop_create():
-    db.drop_all()
     db.create_all()
-    db_insert_records()
-
-def db_insert_records():
-    actor = (Actor(
-        name = "Abdulaziz",
-        age = 21,
-        gender = 'Male'
-    ))
-
-    movie = (Movie(
-        title = 'Catch Me if You Can',
-        release_date = '2023-07-11',
-        genres = ['Action']
-    ))
-
-    actor.inser()
-    movie.inser()
-
-    actor_movie = actors_movies.insert().values(
-        actor_id = actor.id,
-        movie_id = movie.id
-    )
-
-    db.session.execute(actor_movie)
-    db.session.commit()
 
 actors_movies = db.Table('actor_movies',
     Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),

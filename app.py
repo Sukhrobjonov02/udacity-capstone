@@ -2,8 +2,7 @@ import os
 from flask import Flask, jsonify, abort, request
 from models import setup_db
 from flask_cors import CORS
-from models import Movie, Actor, db
-import traceback
+from models import Movie, Actor
 
 from auth import AuthError, requires_auth
 

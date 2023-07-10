@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from config import DATABASE_URL
+import json
 
 database_path = DATABASE_URL
 if database_path.startswith("postgres://"):
@@ -27,6 +28,26 @@ class Movie(db.Model):
     release_date = db.Column(db.DateTime, default=datetime.today(), nullable=False)
     genres = db.Column(db.ARRAY(db.String()), nullable=False)
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+    
+    def about(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release_date': self.release_date,
+            'genres': self.genres,
+        }
+
+
 class Actor(db.Model):
     __tablename__ = 'actors'
 
@@ -34,3 +55,22 @@ class Actor(db.Model):
     name = db.Column(db.String, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String, nullable=False)
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+    
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def about(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender,
+        }

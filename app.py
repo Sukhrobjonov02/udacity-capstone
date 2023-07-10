@@ -4,6 +4,7 @@ from models import setup_db
 from flask_cors import CORS
 
 def create_app(test_config=None):
+    
     app = Flask(__name__)
     app.app_context().push()
     setup_db(app)
